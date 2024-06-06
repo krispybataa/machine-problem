@@ -20,17 +20,40 @@ class StudentController extends Controller
         return view('student.home', compact('enrollments'));
     }
 
+    public function index()
+    {
+        $user = Auth::user();
+
+        if ($user->role === 'student') {
+            $enrollments = Enrollment::where('user_id', $user->id)
+                ->whereNotNull('finalized_at')
+                ->with('subject')
+                ->get();
+
+            return view('student.home', compact('enrollments'));
+        } elseif ($user->role === 'professor') {
+            $subjects = Subject::all();
+            return view('professor.home', compact('subjects'));
+        }
+
+        return view('home');
+    }
+
+
     public function searchSubjects(Request $request)
     {
-        $search = $request->input('search');
-        $subjects = Subject::with('professor', 'enrollments')
-            ->when($search, function($query, $search) {
-                return $query->where('name', 'like', "%{$search}%");
-            })
-            ->get();
+        $query = $request->input('query');
+
+        if ($query) {
+            $subjects = Subject::where('name', 'LIKE', "%{$query}%")->get();
+        } else {
+            $subjects = Subject::all();
+        }
 
         return view('student.subjects', compact('subjects'));
     }
+
+
     public function subjects()
     {
         $subjects = Subject::withCount(['enrollments' => function ($query) {
@@ -46,27 +69,29 @@ class StudentController extends Controller
         $subject = Subject::find($id);
         $user = Auth::user();
 
-        // Check if the subject is already in the cart
+        // Check if the subject is already in the cart or already finalized
         $existingEnrollment = Enrollment::where('user_id', $user->id)
             ->where('subject_id', $subject->id)
             ->whereNull('finalized_at')
             ->first();
 
-        if ($existingEnrollment) {
-            return redirect()->back()->with('error', 'Subject is already in your cart!');
+        $alreadyFinalized = Enrollment::where('user_id', $user->id)
+            ->where('subject_id', $subject->id)
+            ->whereNotNull('finalized_at')
+            ->first();
+
+        if ($existingEnrollment || $alreadyFinalized) {
+            return redirect()->back()->with('error', 'Subject is already in your cart or already enrolled!');
         }
 
-        if ($subject->available_slots > 0) {
-            Enrollment::create([
-                'user_id' => $user->id,
-                'subject_id' => $subject->id,
-            ]);
+        Enrollment::create([
+            'user_id' => $user->id,
+            'subject_id' => $subject->id,
+        ]);
 
-            return redirect()->back()->with('success', 'Subject added to cart!');
-        }
-
-        return redirect()->back()->with('error', 'No available slots for this subject!');
+        return redirect()->back()->with('success', 'Subject added to cart!');
     }
+
 
     public function viewCart()
     {
@@ -86,17 +111,20 @@ class StudentController extends Controller
             ->whereNull('finalized_at')
             ->get();
 
+        $subjectsEnrolled = [];
+
         foreach ($enrollments as $enrollment) {
-            $subject = $enrollment->subject;
-            if ($subject->available_slots > 0) {
+            if (!in_array($enrollment->subject_id, $subjectsEnrolled)) {
                 $enrollment->finalized_at = now();
                 $enrollment->save();
+                $subjectsEnrolled[] = $enrollment->subject_id;
 
                 // Decrease the available slots
+                $subject = $enrollment->subject;
                 $subject->available_slots -= 1;
                 $subject->save();
             } else {
-                return redirect()->route('student.cart')->with('error', "No available slots for {$subject->name}!");
+                $enrollment->delete();
             }
         }
 

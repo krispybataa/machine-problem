@@ -2,13 +2,12 @@
 
 @section('content')
     <div class="container">
+        <h1>Enrolled Subjects</h1>
         <div>
             <a href="{{ route('student.subjects') }}">Search Subjects</a>
             <a href="{{ route('student.cart') }}">View Cart</a>
         </div>
-
-        <h2>Enrolled Subjects</h2>
-        @if($enrollments->isEmpty())
+        @if ($enrollments->isEmpty())
             <p>You are not enrolled in any subjects.</p>
         @else
             <table class="table">
@@ -20,7 +19,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($enrollments as $enrollment)
+                @foreach ($enrollments as $enrollment)
                     <tr>
                         <td>{{ $enrollment->subject->name }}</td>
                         <td>{{ $enrollment->subject->available_slots }}</td>
