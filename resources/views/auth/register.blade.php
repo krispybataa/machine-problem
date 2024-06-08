@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        body {
+            background-image: url('https://i.postimg.cc/MZ4h6swf/LoginBG.png');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">

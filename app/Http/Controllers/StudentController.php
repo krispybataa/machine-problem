@@ -80,8 +80,12 @@ class StudentController extends Controller
             ->whereNotNull('finalized_at')
             ->first();
 
-        if ($existingEnrollment || $alreadyFinalized) {
-            return redirect()->back()->with('error', 'Subject is already in your cart or already enrolled!');
+        if ($existingEnrollment) {
+            return redirect()->back()->with('error', 'Subject is already in your cart!');
+        }
+
+        if ($alreadyFinalized) {
+            return redirect()->back()->with('error', 'You are already enrolled in this subject!');
         }
 
         Enrollment::create([
@@ -111,25 +115,19 @@ class StudentController extends Controller
             ->whereNull('finalized_at')
             ->get();
 
-        $subjectsEnrolled = [];
-
         foreach ($enrollments as $enrollment) {
-            if (!in_array($enrollment->subject_id, $subjectsEnrolled)) {
-                $enrollment->finalized_at = now();
-                $enrollment->save();
-                $subjectsEnrolled[] = $enrollment->subject_id;
+            $enrollment->finalized_at = now();
+            $enrollment->save();
 
-                // Decrease the available slots
-                $subject = $enrollment->subject;
-                $subject->available_slots -= 1;
-                $subject->save();
-            } else {
-                $enrollment->delete();
-            }
+            // Decrease the available slots
+            $subject = $enrollment->subject;
+            $subject->available_slots -= 1;
+            $subject->save();
         }
 
         return redirect()->route('student.cart')->with('success', 'Enrollment finalized successfully!');
     }
+
 
     public function removeFromCart($id)
     {
