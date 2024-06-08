@@ -1,4 +1,4 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="left"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 # SAIS 改
 ## Overview
@@ -84,7 +84,11 @@ The UPM Enrollment System is a web-based application designed to streamline the 
 
 
 ## Entity Relationship Diagram
-![ERD](ADD MO NA LANG DITO)
+<p align="LEFT">
+    <a href="https://github.com/krispybataa/machine-problem" target="_blank">
+        <img src="https://raw.githubusercontent.com/krispybataa/machine-problem/a45d6e68eeff9c0c63622c280f61a6997ee080d1/resources/images/erd.png" width="400" alt="ERD">
+    </a>
+</p>
 
 
 ## Contact Us
