@@ -1,6 +1,12 @@
-<p align="left"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+    <a href="https://laravel.com" target="_blank">
+        <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
+    </a>
+    <a href="https://github.com/krispybataa/machine-problem" target="_blank">
+        <img src="https://raw.githubusercontent.com/krispybataa/machine-problem/74d431bfc41abc8297e0d1910f4c27cb735267d2/resources/images/logo.png" width="400" alt="Logo">
+    </a>
+</div>
 
-# SAIS 改
 ## Overview
 The UPM Enrollment System is a web-based application designed to streamline the enrollment process for students and professors at the University of the Philippines Manila (UPM). It provides a user-friendly interface for students to enroll in subjects and for professors to manage their classes and student enrollments.
 
